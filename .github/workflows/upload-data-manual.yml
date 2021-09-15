@@ -27,7 +27,7 @@ jobs:
     - name: Run - Upload Data
       run: |
         export PYTHONPATH="$PYTHONPATH:./src"
-        python src/hansard_lk/upload_data.py
+        python src/hansard_lk/scrape_pdfs.py
 
     - name: Checkout repo branch data
       uses: actions/checkout@v2
