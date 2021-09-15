@@ -1,3 +1,5 @@
+import os
+
 from bs4 import BeautifulSoup
 from utils import timex, www
 
@@ -31,14 +33,24 @@ def get_pdf_info_list():
     log.info(f'Scraped {n_pdf_info_list} PDFs.')
     return pdf_info_list
 
+
 def download_pdfs():
     pdf_info_list = get_pdf_info_list()
     for pdf_info in pdf_info_list:
         date_id = pdf_info['date_id']
         url_pdf = pdf_info['url_pdf']
-        pdf_file = f'/tmp/hansard_lk.{date_id}.pdf'
-        www.download_binary(url_pdf, pdf_file)
-        log.info(f'Downloaded {url_pdf} to {pdf_file}')
+        pdf_file_only = f'hansard_lk.{date_id}.pdf'
+        pdf_file = os.path.join('/tmp', pdf_file_only)
+        url_remote_pdf = os.path.join(
+            'https://github.com',
+            'nuuuwan/hansard_lk/blob/data',
+            pdf_file_only,
+        )
+        if www.exists(url_remote_pdf):
+            log.warn(f'{url_remote_pdf} already exists')
+        else:
+            www.download_binary(url_pdf, pdf_file)
+            log.info(f'Downloaded {url_pdf} to {pdf_file}')
 
 
 if __name__ == '__main__':
